@@ -44,14 +44,12 @@
 
     private LibraryMember newMember = new LibraryMember();
 
-    string test = "";
-
     private void HandleValidSubmit()
     {
-        newMember.CardNumber = 1234;
+        newMember.CardNumber = regsitrationService.RandomString();
         regsitrationService.Add(newMember);
 
         string name = $"{newMember.FirstName} {newMember.LastName}";
-        NavigationManager.NavigateTo($"/members/registrationSucess/{name}");
+        NavigationManager.NavigateTo($"/members/registrationSucess/{newMember.Id.ToString()}");
     }
 }

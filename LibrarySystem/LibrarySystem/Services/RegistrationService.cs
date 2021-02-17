@@ -18,6 +18,7 @@ namespace LibrarySystem.Services
 
         public void Add(LibraryMember member)
         {
+
             using (ApplicationDbContext dbContext = _db.CreateDbContext())
             {
                 dbContext.LibraryMembers.Add(member);
@@ -25,5 +26,28 @@ namespace LibrarySystem.Services
             }
         }
 
+        public async Task<LibraryMember>FindMember(int id)
+        {
+            LibraryMember member = new LibraryMember();
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                member = await dbContext.LibraryMembers.Where(member => member.Id == id).FirstOrDefaultAsync();
+                dbContext.SaveChanges();
+            }
+
+            return member;
+        }
+
+
+        public string RandomString()
+        {
+            int length = 5;
+
+            Random random = new Random();
+
+            const string chars = "123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace LibrarySystem.Data.Models
         [Required]
         public string LastName { get; set; }
 
-        public int CardNumber { get; set; }
+        public string CardNumber { get; set; }
 
         [Required]
         public string Address { get; set; }

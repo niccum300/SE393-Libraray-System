@@ -1,13 +1,23 @@
-﻿@page "/members/registrationSucess/{Name}"
+﻿@page "/members/registrationSucess/{Id}"
+@using LibrarySystem.Services
+@inject IRegistrationService regsitrationService
 
 <div class="container text-center">
     <h2>Registration Successfull!</h2>
-    <br/>
-    <h3>@Name has been successfully register as a new member. </h3>
+    <br />
+    <h3>@member.FirstName @member.LastName has been successfully registered as a new member. </h3>
+    <h3>Card Number: @member.CardNumber</h3>
 </div>
 
 
 @code {
     [Parameter]
-    public string Name { get; set; }
+    public string Id { get; set; }
+
+    private LibraryMember member = new LibraryMember();
+
+    protected override async Task OnInitializedAsync()
+    {
+        member = await regsitrationService.FindMember(Convert.ToInt32(Id));
+    }
 }
