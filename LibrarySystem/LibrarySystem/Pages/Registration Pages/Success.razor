@@ -1,0 +1,13 @@
+﻿@page "/members/registrationSucess/{Name}"
+
+<div class="container text-center">
+    <h2>Registration Successfull!</h2>
+    <br/>
+    <h3>@Name has been successfully register as a new member. </h3>
+</div>
+
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+}
