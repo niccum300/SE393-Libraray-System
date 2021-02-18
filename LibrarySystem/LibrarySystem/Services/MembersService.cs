@@ -43,7 +43,7 @@ namespace LibrarySystem.Services
 
             using (ApplicationDbContext dbContext = _db.CreateDbContext())
             {
-                return await dbContext.LibraryMembers.Where(m => m.FirstName.ToLower().Contains(searchString.ToLower())).ToListAsync();
+                return await dbContext.LibraryMembers.Where(m => (m.FirstName.ToLower() + " " + m.LastName.ToLower()).Contains(searchString.ToLower())).ToListAsync();
             }
         }
 
