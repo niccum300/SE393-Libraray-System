@@ -25,6 +25,24 @@ namespace LibrarySystem.Services
                 dbContext.SaveChanges();
             }
         }
+        
+        public void Update(LibraryMember member)
+        {
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                dbContext.Entry(member).State = EntityState.Modified;
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void Delete(LibraryMember member)
+        {
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                dbContext.Entry(member).State = EntityState.Deleted;
+                dbContext.SaveChanges();
+            }
+        }
 
         public async Task<LibraryMember> FindMember(int id)
         {
@@ -43,7 +61,7 @@ namespace LibrarySystem.Services
 
             using (ApplicationDbContext dbContext = _db.CreateDbContext())
             {
-                return await dbContext.LibraryMembers.Where(m => (m.FirstName.ToLower() + " " + m.LastName.ToLower()).Contains(searchString.ToLower())).ToListAsync();
+                return await dbContext.LibraryMembers.Where(m => (m.FirstName.ToLower() + " " + m.LastName.ToLower()).Contains(searchString.ToLower())).OrderBy(s => s.LastName).ToListAsync();
             }
         }
 

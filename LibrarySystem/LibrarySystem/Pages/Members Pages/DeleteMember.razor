@@ -1,0 +1,57 @@
+﻿@page "/members/delete/{Id}"
+@using LibrarySystem.Services
+@inject NavigationManager NavigationManager
+@inject IMembersService membersService
+
+<h2>Delete</h2>
+<h3>Are you sure you want to delete this member?</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <div class="form-group">
+                <label for="firstName" class="control-label">First Name: </label>
+                <input id="firstName" @bind-value="member.FirstName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="name" class="control-label">Last Name: </label>
+                <input id="lastName" @bind-value="member.LastName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="address" class="control-label">Address: </label>
+                <input id="address" @bind-value="member.Address" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber" class="control-label">Phone Number: </label>
+                <input id="phoneNumber" @bind-value="member.PhoneNumber" class="form-control" />
+            </div>
+            <input class="btn btn-primary" type="submit" value="Cancel" @onclick="HandleCancelation">
+            <input class="btn btn-danger" type="submit" value="Delete" @onclick="HandleValidSubmit">
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    public LibraryMember member = new LibraryMember();
+
+    protected override async Task OnInitializedAsync()
+    {
+        member = await membersService.FindMember(Convert.ToInt32(Id));
+    }
+
+    private void HandleValidSubmit()
+    {
+        membersService.Delete(member);
+
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void HandleCancelation()
+    {
+
+        NavigationManager.NavigateTo("/members");
+    }
+}

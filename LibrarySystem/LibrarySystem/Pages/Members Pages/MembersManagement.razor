@@ -35,12 +35,22 @@
             <p><em>@members.Count Results Found</em></p>
             @if (members.Count > 0)
             {
-                foreach (LibraryMember member in members)
+                for (int i = 0; i < members.Count; i += 3)
                 {
-                    <h1>@member.FirstName @member.LastName</h1>
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="card-deck text-center">
+                            @for (int j = i; (j < i + 3) && (j < members.Count); j++)
+                            {
+                                <MemberCard Member="members[j]"></MemberCard>
+                            }
+                        </div>
+                    </div>
                 }
             }
-
+            <br />
+            <br />
         </div>
     </Authorized>
     <NotAuthorized>

@@ -1,0 +1,30 @@
+﻿@inject NavigationManager navigationManager
+
+<div class="card">
+    <div class="card-header bg-primary">
+        <h4 style="color:white">@Member.FirstName @Member.LastName</h4>
+    </div>
+    <div class="card-body">
+        <div class="container text-center">
+            <h5><bold>Card Number: </bold>@Member.CardNumber</h5>
+            <h5><bold>Address: </bold>@Member.Address</h5>
+            <h5><bold>Phone Number: </bold>@Member.PhoneNumber</h5>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-danger btn-md float-right" @onclick="@(() => navigationManager.NavigateTo($"/Members/Delete/{Member.Id.ToString()}"))"
+                id="right" style="color:white">
+            Delete
+        </button>
+        <button class="btn btn-primary btn-md float-left" @onclick="@(() => navigationManager.NavigateTo($"/Members/Edit/{Member.Id.ToString()}"))"
+                id="right" style="color:white">
+            Edit
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public LibraryMember Member { get; set; }
+
+}

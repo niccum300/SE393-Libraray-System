@@ -8,6 +8,10 @@ namespace LibrarySystem.Services
     {
         void Add(LibraryMember member);
 
+        void Update(LibraryMember member);
+
+        void Delete(LibraryMember member);
+
         Task<LibraryMember> FindMember(int id);
 
         Task<List<LibraryMember>> SearchMembers(string searchString);
