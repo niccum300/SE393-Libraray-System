@@ -1,6 +1,6 @@
 ﻿@page "/members/registrationSucess/{Id}"
 @using LibrarySystem.Services
-@inject IRegistrationService regsitrationService
+@inject IMembersService membersService
 
 <div class="container text-center">
     <h2>Registration Successfull!</h2>
@@ -18,6 +18,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        member = await regsitrationService.FindMember(Convert.ToInt32(Id));
+        member = await membersService.FindMember(Convert.ToInt32(Id));
     }
 }

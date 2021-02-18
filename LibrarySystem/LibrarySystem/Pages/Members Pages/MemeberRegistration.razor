@@ -1,7 +1,7 @@
 ﻿@page "/members/register"
 @using LibrarySystem.Services
 @inject NavigationManager NavigationManager
-@inject IRegistrationService regsitrationService
+@inject IMembersService membersService
 <div class="container">
 
     <h3>New Member Registration</h3>
@@ -46,8 +46,8 @@
 
     private void HandleValidSubmit()
     {
-        newMember.CardNumber = regsitrationService.RandomString();
-        regsitrationService.Add(newMember);
+        newMember.CardNumber = membersService.RandomString();
+        membersService.Add(newMember);
 
         string name = $"{newMember.FirstName} {newMember.LastName}";
         NavigationManager.NavigateTo($"/members/registrationSucess/{newMember.Id.ToString()}");

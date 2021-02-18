@@ -1,0 +1,59 @@
+﻿@page "/members"
+@using LibrarySystem.Services;
+@inject IMembersService membersService
+@inject NavigationManager navigationManger
+
+<div class="container text-center">
+    <h2>Member Management</h2>
+</div>
+<br/>
+<div class="container text-center">
+    <div class="card text-white">
+        <div class="card-header bg-primary">
+            <div class="container">
+                <h3 class="float-left"></h3>
+                <h3>Search Users</h3>
+                <button class="btn btn-light btn-md float-right" @onclick="@(() => navigationManger.NavigateTo("/Members/Register"))"
+                        id="right" style="color:black">
+                    Add Member
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <br />
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Search</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" @oninput="@((ChangeEventArgs e) => Search(e.Value.ToString()))">
+            </div>
+        </div>
+    </div>
+    <br />
+    <p><em>@members.Count Results Found</em></p>
+    @if (members.Count > 0)
+    {
+        foreach (LibraryMember member in members)
+        {
+            <h1>@member.FirstName @member.LastName</h1>
+        }
+    }
+
+</div>
+
+
+
+
+@code {
+
+
+    List<LibraryMember> members = new List<LibraryMember>();
+
+    private async void Search(string value)
+    {
+        members.Clear();
+        members = await membersService.SearchMembers(value);
+        StateHasChanged();
+    }
+
+}

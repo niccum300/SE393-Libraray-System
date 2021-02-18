@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace LibrarySystem.Services
 {
-    public class RegistrationService : IRegistrationService
+    public class MembersService : IMembersService
     {
         readonly IDbContextFactory<ApplicationDbContext> _db;
-        public RegistrationService(IDbContextFactory<ApplicationDbContext> db)
+        public MembersService(IDbContextFactory<ApplicationDbContext> db)
         {
             _db = db;
         }
@@ -26,7 +26,7 @@ namespace LibrarySystem.Services
             }
         }
 
-        public async Task<LibraryMember>FindMember(int id)
+        public async Task<LibraryMember> FindMember(int id)
         {
             LibraryMember member = new LibraryMember();
             using (ApplicationDbContext dbContext = _db.CreateDbContext())
@@ -38,6 +38,14 @@ namespace LibrarySystem.Services
             return member;
         }
 
+        public async Task<List<LibraryMember>> SearchMembers(string searchString)
+        {
+
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                return await dbContext.LibraryMembers.Where(m => m.FirstName.ToLower().Contains(searchString.ToLower())).ToListAsync();
+            }
+        }
 
         public string RandomString()
         {

@@ -43,9 +43,7 @@ namespace LibrarySystem
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddScoped<IEntity, LibraryMember>();
-            services.AddScoped<IRegistrationService, RegistrationService>();
-
-            services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<IMembersService, MembersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
