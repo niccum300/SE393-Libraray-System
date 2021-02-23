@@ -15,6 +15,7 @@ namespace LibrarySystem.Data
         }
 
         public DbSet<LibraryMember> LibraryMembers { get; set; }
+        public DbSet<Book> Books { get; set; }
 
     }
 }
