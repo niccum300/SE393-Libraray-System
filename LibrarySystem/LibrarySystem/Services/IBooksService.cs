@@ -1,4 +1,6 @@
 ﻿using LibrarySystem.Data.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LibrarySystem.Services
 {
@@ -9,5 +11,7 @@ namespace LibrarySystem.Services
         void Update(Book book);
 
         void Delete(Book book);
+
+        Task<List<Book>> SearchTitle(string searchString);
     }
 }

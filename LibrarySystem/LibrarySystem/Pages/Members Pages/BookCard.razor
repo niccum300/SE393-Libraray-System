@@ -1,0 +1,17 @@
+﻿<div class="card">
+    <div class="card-header bg-primary">
+        <h4 style="color:white">@Book.Title</h4>
+    </div>
+    <div class="card-body">
+        <div class="container text-center">
+            <h5><bold>Author: </bold>@Book.Author</h5>
+            <h5><bold>ISBN: </bold>@Book.ISBN</h5>
+            <h5><bold>Total Copies: </bold>@Book.Copies</h5>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Book Book { get; set; }
+}

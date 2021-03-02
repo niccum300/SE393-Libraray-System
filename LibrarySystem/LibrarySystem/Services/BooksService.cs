@@ -43,5 +43,14 @@ namespace LibrarySystem.Services
                 conn.SaveChanges();
             }
         }
+
+        public async Task<List<Book>> SearchTitle(string searchString)
+        {
+
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                return await dbContext.Books.Where(m => (m.Title.ToLower()).Contains(searchString.ToLower())).OrderBy(s => s.Title).ToListAsync();
+            }
+        }
     }
 }
