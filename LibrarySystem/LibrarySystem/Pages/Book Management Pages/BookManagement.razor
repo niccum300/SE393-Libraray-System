@@ -1,4 +1,4 @@
-﻿@page "/books/search"
+﻿@page "/books"
 @using LibrarySystem.Services;
 @inject IBooksService booksService
 @inject NavigationManager navigationManger
@@ -39,18 +39,23 @@
                 {
                     <br />
                     <br />
-                    <div class="row">
-                        <div class="card-deck text-center">
-                            @for (int j = i; (j < i + 3) && (j < books.Count); j++)
-                            {
-                                <BookCard Book="books[j]"></BookCard>
-                            }
+                    <div class="container">
+                        <div class="row">
+                                @for (int j = i; (j < i + 3) && (j < books.Count); j++)
+                                {
+                            <div class="col-md-4 col-md-2">
+                                <BookCard Book="books[j]" Color="j"></BookCard>
+                                <br />
+                            </div>
+                                }
+                            <div class="col-sm-12 shelf hidden-md hidden-lg"></div>
                         </div>
                     </div>
                 }
             }
             <br />
             <br />
+
         </div>
     </Authorized>
     <NotAuthorized>

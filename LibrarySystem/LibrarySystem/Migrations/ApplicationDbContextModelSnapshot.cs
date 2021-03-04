@@ -33,6 +33,9 @@ namespace LibrarySystem.Migrations
                     b.Property<int>("Copies")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ISBN")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -44,6 +47,31 @@ namespace LibrarySystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("LibrarySystem.Data.Models.BookTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CheckoutDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LibraryMemberId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("LibraryMemberId");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("LibrarySystem.Data.Models.LibraryMember", b =>
@@ -76,31 +104,6 @@ namespace LibrarySystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LibraryMembers");
-                });
-
-            modelBuilder.Entity("LibrarySystem.Data.Models.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CheckoutDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LibraryMemberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("LibraryMemberId");
-
-                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -303,7 +306,7 @@ namespace LibrarySystem.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("LibrarySystem.Data.Models.Transaction", b =>
+            modelBuilder.Entity("LibrarySystem.Data.Models.BookTransaction", b =>
                 {
                     b.HasOne("LibrarySystem.Data.Models.Book", "Book")
                         .WithMany("Transactions")

@@ -48,3 +48,24 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.book {
+    padding: 15px 0 0 0;
+    margin: auto;
+}
+
+.shelf {
+    border-bottom: 30px solid #DEB887;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    top: -15px;
+    z-index: -1;
+}
+
+.shelf-back {
+    background-color: #b37b50;
+}
+
+.book-color_2 {
+    background-color: #E5D3B3
+}

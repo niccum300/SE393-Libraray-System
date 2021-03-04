@@ -1,0 +1,24 @@
+﻿<div class="card">
+    <div class="card-header">
+        <h3><bold>@Book.Title</bold></h3>
+    </div>
+    <div class="card-body text-center book-color_2">
+        <h5>@Book.Author</h5>
+        <br />
+        <h5><bold>Total Copies: </bold>@Book.Copies</h5>
+        <br />
+        <hh6><bold>ISBN: </bold>@Book.ISBN</hh6>
+    </div>
+
+</div>
+
+
+
+
+@code {
+    [Parameter]
+    public Book Book { get; set; }
+
+    [Parameter]
+    public int Color { get; set; }
+}
