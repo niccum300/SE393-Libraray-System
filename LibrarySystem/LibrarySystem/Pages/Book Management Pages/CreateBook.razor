@@ -2,6 +2,8 @@
 @inject NavigationManager NavigationManager
 @using LibrarySystem.Services
 @inject IBooksService _bookService
+@inject ITransactionService transactionService
+@inject IMembersService memberService
 
 <AuthorizeView Context="Auth">
     <Authorized>
@@ -39,6 +41,16 @@
                 </div>
             </div>
 
+            <input class="btn btn-primary" type="submit" value="Test Transaction" @onclick="Test">
+            <input class="btn btn-primary" type="submit" value="test" @onclick="Test2">
+
+            @if (LibraryMember.LastName != null)
+            {
+                <h1>@LibraryMember.Transactions.Inl.FirstOrDefault()</h1>
+            }
+
+
+
         </div>
     </Authorized>
     <NotAuthorized>
@@ -53,6 +65,8 @@
 
     private Book newBook = new Book();
 
+    private LibraryMember LibraryMember = new LibraryMember();
+
     protected override void OnInitialized()
     {
         newBook.Copies = 1;
@@ -63,6 +77,27 @@
         _bookService.Create(newBook);
 
         NavigationManager.NavigateTo("/");
+    }
+
+    private void Test()
+    {
+        BookTransaction transaction = new BookTransaction
+        {
+            BookId = 1,
+            LibraryMemberId = 1,
+            CheckoutDate = DateTime.Now
+        };
+
+        transactionService.Create(transaction);
+    }
+
+    private async void Test2()
+    {
+        LibraryMember = await memberService.FindMember(1);
+        
+        newBook = LibraryMember.Transactions.Select(s => s.Book).FirstOrDefault();
+
+        StateHasChanged();
     }
 }
 

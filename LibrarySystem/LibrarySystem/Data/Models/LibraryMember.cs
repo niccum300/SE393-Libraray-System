@@ -25,5 +25,7 @@ namespace LibrarySystem.Data.Models
         [MaxLength(10)]
         [Required]
         public string PhoneNumber { get; set; }
+
+        public ICollection<BookTransaction> Transactions { get; set; }
     }
 }

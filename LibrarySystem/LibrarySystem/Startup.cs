@@ -45,6 +45,7 @@ namespace LibrarySystem
             services.AddScoped<IEntity, LibraryMember>();
             services.AddScoped<IMembersService, MembersService>();
             services.AddScoped<IBooksService, BooksService>();
+            services.AddScoped<ITransactionService, TransactionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
