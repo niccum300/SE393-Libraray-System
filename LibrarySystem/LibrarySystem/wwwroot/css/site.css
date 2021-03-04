@@ -59,11 +59,25 @@ a, .btn-link {
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     top: -15px;
-    z-index: -1;
+    z-index: -10;
+}
+    /*Example adding pseudo element to give shelf depth*/
+.shelf:after {
+    content: '';
+    background: #a38864;
+    height: 20px;
+    width: calc(100% + 40px); /*IE9+*/
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0 -20px;
 }
 
 .shelf-back {
-    background-color: #b37b50;
+    background-color: #5c3b1b;
+    z-index: 0;
 }
 
 .book-color_2 {

@@ -33,25 +33,32 @@
             </div>
             <br />
             <p><em>@books.Count Results Found</em></p>
+
+            <h5>Book Shelf</h5>
             @if (books.Count > 0)
             {
-                for (int i = 0; i < books.Count; i += 3)
-                {
-                    <br />
-                    <br />
-                    <div class="container">
+                <br />
+                <br />
+                <div class="container">
+                    @for (int i = 0; i < books.Count; i += 3)
+                    {
                         <div class="row">
-                                @for (int j = i; (j < i + 3) && (j < books.Count); j++)
-                                {
-                            <div class="col-md-4 col-md-2">
-                                <BookCard Book="books[j]" Color="j"></BookCard>
+                            @for (int j = i; (j < i + 3) && (j < books.Count); j++)
+                            {
+                                <div class="col-md-4 col-md-2">
+                                    <BookCard Book="books[j]"></BookCard>
+                                </div>
                                 <br />
-                            </div>
-                                }
+                            }
+
                             <div class="col-sm-12 shelf hidden-md hidden-lg"></div>
                         </div>
-                    </div>
-                }
+                        <br />
+                        <br />
+                    }
+                </div>
+                <br />
+                <br />
             }
             <br />
             <br />
@@ -76,4 +83,8 @@
         StateHasChanged();
     }
 
+    protected override void OnInitialized()
+    {
+        Search("");
+    }
 }
