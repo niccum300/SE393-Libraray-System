@@ -5,7 +5,7 @@
 @inject ITransactionService transactionService
 @inject IMembersService memberService
 
-<AuthorizeView Context="Auth">
+<AuthorizeView Context="CreateBook" Roles="Admin, Assistant">
     <Authorized>
         <div class="container">
 

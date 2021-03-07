@@ -3,7 +3,7 @@
 @inject NavigationManager NavigationManager
 @inject IMembersService membersService
 
-<AuthorizeView Context="Auth">
+<AuthorizeView Context="Auth" Roles="Admin, Assistant">
     <Authorized>
         <div class="container">
 

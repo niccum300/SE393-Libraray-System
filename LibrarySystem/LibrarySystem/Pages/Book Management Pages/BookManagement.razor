@@ -3,7 +3,7 @@
 @inject IBooksService booksService
 @inject NavigationManager navigationManger
 
-<AuthorizeView>
+<AuthorizeView Roles="Admin, Assistant">
     <Authorized>
         <div class="container text-center">
             <h2>Book Management</h2>
