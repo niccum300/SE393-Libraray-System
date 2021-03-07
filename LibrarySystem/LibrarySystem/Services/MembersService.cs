@@ -49,7 +49,7 @@ namespace LibrarySystem.Services
             LibraryMember member = new LibraryMember();
             using (ApplicationDbContext dbContext = _db.CreateDbContext())
             {
-                member = await dbContext.LibraryMembers.Where(member => member.Id == id).Include(x => x.Transactions).FirstOrDefaultAsync();
+                member = await dbContext.LibraryMembers.Where(member => member.Id == id).FirstOrDefaultAsync();
                 dbContext.SaveChanges();
             }
 

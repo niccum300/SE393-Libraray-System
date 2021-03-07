@@ -24,6 +24,5 @@ namespace LibrarySystem.Data.Models
         [Required]
         public int Copies { get; set; }
 
-        public ICollection<BookTransaction> Transactions { get; set; }
     }
 }

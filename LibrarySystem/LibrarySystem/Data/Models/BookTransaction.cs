@@ -10,12 +10,11 @@ namespace LibrarySystem.Data.Models
         public int Id { get; set; }
 
         public int BookId { get; set; }
-        public Book Book { get; set; }
 
         public int LibraryMemberId { get; set; }
-        public LibraryMember LibraryMember { get; set; }
 
         public DateTime CheckoutDate { get; set; }
 
+        public DateTime DueDate { get; set; }
     }
 }

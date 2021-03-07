@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibrarySystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210307065257_initial")]
+    [Migration("20210307184842_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,14 +132,13 @@ namespace LibrarySystem.Migrations
                     b.Property<DateTime>("CheckoutDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("LibraryMemberId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("LibraryMemberId");
 
                     b.ToTable("Transactions");
                 });
@@ -311,25 +310,6 @@ namespace LibrarySystem.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("LibrarySystem.Data.Models.BookTransaction", b =>
-                {
-                    b.HasOne("LibrarySystem.Data.Models.Book", "Book")
-                        .WithMany("Transactions")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LibrarySystem.Data.Models.LibraryMember", "LibraryMember")
-                        .WithMany("Transactions")
-                        .HasForeignKey("LibraryMemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("LibraryMember");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -379,16 +359,6 @@ namespace LibrarySystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("LibrarySystem.Data.Models.Book", b =>
-                {
-                    b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("LibrarySystem.Data.Models.LibraryMember", b =>
-                {
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

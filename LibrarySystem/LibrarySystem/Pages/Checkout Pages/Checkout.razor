@@ -1,0 +1,23 @@
+﻿@page "/Checkout"
+@using LibrarySystem.Services
+@inject IBooksService _booksService
+@inject IMembersService _membersService
+@inject ICheckoutService _checkoutService 
+
+<h3>Checkout</h3>
+
+<input class="btn btn-primary" type="submit" value="Submit" @onclick="@CheckoutBooks">
+
+@code {
+
+    List<Book> books = new List<Book>();
+    public LibraryMember libraryMember { get; set; }
+
+    private async void CheckoutBooks()
+    {
+        books = await _booksService.SearchTitle("");
+        libraryMember = await _membersService.FindMember(1);
+
+        _checkoutService.CheckoutBook(books, libraryMember);
+    }
+}
