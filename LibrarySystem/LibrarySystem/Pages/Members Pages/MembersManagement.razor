@@ -2,8 +2,9 @@
 @using LibrarySystem.Services;
 @inject IMembersService membersService
 @inject NavigationManager navigationManger
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<AuthorizeView>
+<AuthorizeView Roles="Admin">
     <Authorized>
         <div class="container text-center">
             <h2>Member Management</h2>

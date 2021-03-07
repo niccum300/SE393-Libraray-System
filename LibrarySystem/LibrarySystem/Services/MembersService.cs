@@ -50,7 +50,6 @@ namespace LibrarySystem.Services
             using (ApplicationDbContext dbContext = _db.CreateDbContext())
             {
                 member = await dbContext.LibraryMembers.Where(member => member.Id == id).Include(x => x.Transactions).FirstOrDefaultAsync();
-
                 dbContext.SaveChanges();
             }
 
