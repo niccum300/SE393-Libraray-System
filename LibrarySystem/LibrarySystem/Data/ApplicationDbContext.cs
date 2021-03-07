@@ -19,5 +19,7 @@ namespace LibrarySystem.Data
 
         public DbSet<BookTransaction> Transactions { get; set; }
 
+        public DbSet<Developer> Developers { get; set; }
+
     }
 }
