@@ -126,11 +126,13 @@
 
         if (LibraryMember.MemberType == MemberType.LibraryMember)
         {
-            BookCountLimit = 6;
+            int BooksOut = _checkoutService.CopiesCheckedOut(libraryMember);
+            BookCountLimit = 6 - BooksOut;
         }
         else if (LibraryMember.MemberType == MemberType.Assistant || LibraryMember.MemberType == MemberType.Manager)
         {
-            BookCountLimit = 12;
+            int BooksOut = _checkoutService.CopiesCheckedOut(libraryMember);
+            BookCountLimit = 12 - BooksOut; 
         }
 
 

@@ -9,6 +9,8 @@ namespace LibrarySystem.Services
 
         void CheckInBooks(List<Book> books, LibraryMember libraryMember);
 
+        int CopiesCheckedOut(LibraryMember libraryMember);
+
         void Add(BookTransaction transaction);
 
         int CopiesLeft(Book book);

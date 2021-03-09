@@ -36,6 +36,8 @@ namespace LibrarySystem.Services
             }
         }
 
+
+
         public void Add(BookTransaction transaction)
         {
             using (var conn = _db.CreateDbContext())
@@ -83,6 +85,18 @@ namespace LibrarySystem.Services
                 
             }
 
+        }
+
+        public int CopiesCheckedOut(LibraryMember libraryMember)
+        {
+            int count = 0;
+            using (var conn = _db.CreateDbContext())
+            {
+
+                count = conn.Transactions.Where(t => t.LibraryMemberId == libraryMember.Id).Count();
+            }
+
+            return count;
         }
     }
 }
