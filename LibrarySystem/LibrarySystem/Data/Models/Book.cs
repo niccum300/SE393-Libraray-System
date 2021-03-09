@@ -19,10 +19,13 @@ namespace LibrarySystem.Data.Models
         public string Description { get; set; }
 
         [Required]
+        [MinLength(10)]
+        [MaxLength(13)]
         public string ISBN { get; set; }
 
         [Required]
         public int Copies { get; set; }
 
+        public int CopiesLeft { get; set; }
     }
 }

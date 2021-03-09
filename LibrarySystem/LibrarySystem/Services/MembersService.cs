@@ -56,6 +56,17 @@ namespace LibrarySystem.Services
             return member;
         }
 
+        public LibraryMember FindMember(string cardNumber)
+        {
+            LibraryMember libraryMember;
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                libraryMember = dbContext.LibraryMembers.Where(m => m.CardNumber == cardNumber).FirstOrDefault();
+            }
+
+            return libraryMember;
+        }
+
         public async Task<List<LibraryMember>> SearchMembers(string searchString)
         {
 

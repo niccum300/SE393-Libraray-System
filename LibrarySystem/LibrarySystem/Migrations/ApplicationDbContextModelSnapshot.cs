@@ -101,6 +101,9 @@ namespace LibrarySystem.Migrations
                     b.Property<int>("Copies")
                         .HasColumnType("int");
 
+                    b.Property<int>("CopiesLeft")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 

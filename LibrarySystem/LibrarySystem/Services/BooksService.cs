@@ -52,5 +52,13 @@ namespace LibrarySystem.Services
                 return await dbContext.Books.Where(m => (m.Title.ToLower()).Contains(searchString.ToLower())).OrderBy(s => s.Title).ToListAsync();
             }
         }
+
+        public Book FindByISBN(string ISBN)
+        {
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                return dbContext.Books.Where(b => b.ISBN == ISBN).FirstOrDefault();
+            }
+        }
     }
 }

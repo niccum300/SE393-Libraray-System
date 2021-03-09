@@ -35,12 +35,18 @@ namespace LibrarySystem.Services
             }
         }
 
-        public void Delete(BookTransaction transaction)
+        public void Delete(Book book, LibraryMember libraryMember)
         {
+            BookTransaction transaction = new BookTransaction();
             using (var conn = _db.CreateDbContext())
             {
-                conn.Entry(transaction).State = EntityState.Deleted;
-                conn.SaveChanges();
+                transaction = conn.Transactions.Where(t => t.LibraryMemberId == libraryMember.Id && t.BookId == book.Id).FirstOrDefault();
+
+                if (transaction != null)
+                {
+                    conn.Entry(transaction).State = EntityState.Deleted;
+                    conn.SaveChanges();
+                }
             }
         }
     }

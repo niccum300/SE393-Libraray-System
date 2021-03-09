@@ -1,0 +1,95 @@
+﻿@using LibrarySystem.Services
+@using System.ComponentModel.DataAnnotations
+@inject IMembersService _membersService
+
+@if (ShowDialog)
+{
+
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title" style="color:white" id="titleLabel">Find Member</h5>
+                <button type="button" class="close" @onclick="@Close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@Card" OnValidSubmit="@HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <label for="lastName">Member Card Number: </label>
+                        <InputText id="lastName" class="form-control" @bind-Value="@Card.Number" placeholder="Enter Member Card Number"></InputText>
+                        <ValidationMessage For="@(() => Card.Number)" />
+                    </div>
+
+                    @if (ErrorFlag)
+                    {
+                        <h2 style="color:red">@ErrorMsg</h2>
+                    }
+
+                    <button type="submit" class="btn btn-primary">Find Member</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+
+}
+
+@code
+{
+    public class CardNumber
+    {
+        [Required]
+        public string Number { get; set; }
+    }
+
+    public CardNumber Card = new CardNumber();
+
+    [Parameter]
+    public LibraryMember LibraryMember { get; set; }
+
+    public bool ShowDialog { get; set; }
+
+    public bool ErrorFlag { get; set; } = false;
+
+    public string ErrorMsg { get; set; }
+
+    [Parameter]
+    public EventCallback<LibraryMember> CloseEventCallback { get; set; }
+
+    public void Show()
+    {
+        ResetDialog();
+        ShowDialog = true;
+        StateHasChanged();
+    }
+    public void Close()
+    {
+        ShowDialog = false;
+        StateHasChanged();
+    }
+    private void ResetDialog()
+    {
+        LibraryMember = new LibraryMember();
+        Card = new CardNumber();
+    }
+    protected async Task HandleValidSubmit()
+    {
+        LibraryMember = _membersService.FindMember(Card.Number);
+
+        if (LibraryMember != null)
+        {
+            ShowDialog = false;
+            await CloseEventCallback.InvokeAsync(LibraryMember);
+        }
+        else
+        {
+            ErrorFlag = true;
+            ErrorMsg = $"No member was found with the cardnumber {Card.Number}.";
+        }
+
+        StateHasChanged();
+    }
+}

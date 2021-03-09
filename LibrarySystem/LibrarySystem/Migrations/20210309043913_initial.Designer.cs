@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibrarySystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210307184842_initial")]
+    [Migration("20210309043913_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,6 +101,9 @@ namespace LibrarySystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Copies")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CopiesLeft")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")

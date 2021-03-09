@@ -11,10 +11,29 @@ namespace LibrarySystem.Services
     public class CheckoutService : ICheckoutService
     {
         private readonly IDbContextFactory<ApplicationDbContext> _db;
+        private readonly IBooksService _booksService;
+        private readonly ITransactionService _transactionService;
 
-        public CheckoutService(IDbContextFactory<ApplicationDbContext> db)
+        public CheckoutService(IDbContextFactory<ApplicationDbContext> db, IBooksService booksService,
+            ITransactionService transactionService)
         {
             _db = db;
+            _booksService = booksService;
+            _transactionService = transactionService;
+        }
+
+        public int CopiesLeft(Book book)
+        {
+            var b = _booksService.FindByISBN(book.ISBN);
+
+            if (b != null)
+            {
+                return b.CopiesLeft;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         public void Add(BookTransaction transaction)
@@ -37,19 +56,33 @@ namespace LibrarySystem.Services
                     BookId = b.Id,
                     LibraryMemberId = libraryMember.Id,
                     CheckoutDate = dateTime,
-                    DueDate = dateTime.AddDays(14)
+                    DueDate = dateTime.AddDays(14),
                 };
+
+                b.CopiesLeft -= 1;
+
+                _booksService.Update(b);
 
                 Add(transaction);
             }
 
         }
-    }
 
-    public interface ICheckoutService
-    {
-        void CheckoutBook(List<Book> books, LibraryMember libraryMember);
+        public void CheckInBooks(List<Book> books, LibraryMember libraryMember)
+        {
 
-        void Add(BookTransaction transaction);
+            foreach (Book b in books)
+            {
+                _transactionService.Delete(b, libraryMember);
+
+                b.CopiesLeft += 1;
+                if (b.CopiesLeft <= b.Copies)
+                {
+                    _booksService.Update(b);
+                }
+                
+            }
+
+        }
     }
 }

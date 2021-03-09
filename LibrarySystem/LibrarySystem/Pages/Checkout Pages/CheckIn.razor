@@ -1,4 +1,4 @@
-﻿@page "/Checkout"
+﻿@page "/CheckIn"
 @using LibrarySystem.Services
 @using LibrarySystem.Pages.Members_Pages
 @inject IBooksService _booksService
@@ -8,7 +8,7 @@
 <AuthorizeView Context="Checkout" Roles="Admin, Assistant">
     <Authorized>
         <div class="container text-center">
-            <h3>Checkout Library Books</h3>
+            <h3>Check-In Library Books</h3>
 
             <div class="card">
 
@@ -16,11 +16,11 @@
                     <div class="container text-white text-center">
                         @if (LibraryMemberSelected)
                         {
-                            <h3>Member: @LibraryMember.FirstName @LibraryMember.LastName</h3>
+                            <h3>Member: @libraryMember.FirstName @libraryMember.LastName</h3>
                         }
                         else
                         {
-                            <h3>Add a Library Member to start checkout process.</h3>
+                            <h3>Add a Library Member to start check-in process.</h3>
                         }
 
                     </div>
@@ -28,17 +28,17 @@
                 <div class="card-body">
                     @if (LibraryMemberSelected)
                     {
-                        <EditForm Model="@BookToAdd" OnValidSubmit="@AddBook">
+                        <EditForm Model="@BookToReturn" OnValidSubmit="@AddBook">
                             <DataAnnotationsValidator />
 
                             <div class="form-group">
                                 <label for="Author" class="control-label">ISBN: </label>
-                                <InputText id="author" @bind-Value="BookToAdd.ISBN" class="form-control" />
-                                <ValidationMessage For="@(() => BookToAdd.ISBN)" />
+                                <InputText id="author" @bind-Value="BookToReturn.ISBN" class="form-control" />
+                                <ValidationMessage For="@(() => BookToReturn.ISBN)" />
                             </div>
 
                             <input class="btn btn-primary" type="submit" value="Add" @onclick="@AddBook">
-                            <input class="btn btn-primary" type="submit" value="Checkout Books" @onclick="@CheckoutBooks">
+                            <input class="btn btn-primary" type="submit" value="Check-In Books" @onclick="@CheckInBooks">
 
                         </EditForm>
                     }
@@ -86,9 +86,8 @@
 
         </div>
 
-        <MemberSearchModal @ref="MemberSearchModal" LibraryMember="@LibraryMember" CloseEventCallback="@SetMember"></MemberSearchModal>
-        <SuccessModal @ref="SuccessModal" CloseEventCallback="@ResetPage"></SuccessModal>
-
+        <MemberSearchModal @ref="MemberSearchModal" LibraryMember="@libraryMember" CloseEventCallback="@SetMember"></MemberSearchModal>
+        <SuccessCheckIn @ref="SuccessCheckIn" CloseEventCallback="@Reset"></SuccessCheckIn>
     </Authorized>
     <NotAuthorized>
         <h2>You are not authorized to view this page!</h2>
@@ -98,17 +97,14 @@
 @code {
 
     public MemberSearchModal MemberSearchModal = new MemberSearchModal();
+    public SuccessCheckIn SuccessCheckIn = new SuccessCheckIn();
 
-    public SuccessModal SuccessModal = new SuccessModal();
-
-    private Book BookToAdd = new Book();
+    private Book BookToReturn = new Book();
 
     private List<Book> books = new List<Book>();
-    private LibraryMember LibraryMember { get; set; } = new LibraryMember();
+    private LibraryMember libraryMember = new LibraryMember();
 
-    private int BookCountLimit = 6;
-
-    private bool LibraryMemberSelected = false;
+    public bool LibraryMemberSelected = false;
 
     string errorMsg = "";
     int errorFlag = 0;
@@ -118,9 +114,9 @@
         MemberSearchModal.Show();
     }
 
-    void SetMember(LibraryMember libraryMember)
+    void SetMember(LibraryMember LibraryMember)
     {
-        LibraryMember = libraryMember;
+        libraryMember = LibraryMember;
 
         LibraryMemberSelected = true;
 
@@ -129,55 +125,41 @@
 
     void AddBook()
     {
-        if (books.Count < BookCountLimit)
+        int result = _checkoutService.CopiesLeft(BookToReturn);
+
+        if (result < 0)
         {
-            int result = _checkoutService.CopiesLeft(BookToAdd);
-
-            if (result < 0)
-            {
-                errorFlag = 1;
-                errorMsg = "You have entered an invalid ISBN value. Please Try Again.";
-            }
-            else if (result == 0)
-            {
-                errorFlag = 1;
-                errorMsg = "There are no copies of this book in stock.";
-            }
-            else
-            {
-                errorFlag = 0;
-                books.Add(_booksService.FindByISBN(BookToAdd.ISBN));
-            }
-
-            BookToAdd = new Book();
-
-
+            errorFlag = 1;
+            errorMsg = "You have entered an invalid ISBN value. Please Try Again.";
         }
         else
         {
-            errorFlag = 1;
-            errorMsg = "You have reached the maximum books for checkout.";
+            errorFlag = 0;
+            books.Add(_booksService.FindByISBN(BookToReturn.ISBN));
         }
 
+        BookToReturn = new Book();
+
+
         StateHasChanged();
     }
 
 
-    private void CheckoutBooks()
+    private void CheckInBooks()
     {
 
-        _checkoutService.CheckoutBook(books, LibraryMember);
+        _checkoutService.CheckInBooks(books, libraryMember);
 
-        SuccessModal.Show();
+        SuccessCheckIn.Show();
     }
 
-    void ResetPage()
+    void Reset()
     {
-        errorFlag = 0;
-        LibraryMemberSelected = false;
-        LibraryMember = new LibraryMember();
         books.Clear();
+        BookToReturn = new Book();
 
-        StateHasChanged();
+        errorFlag = 0;
+        libraryMember = new LibraryMember();
     }
 }
+

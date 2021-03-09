@@ -8,7 +8,7 @@ namespace LibrarySystem.Services
 
         void Update(BookTransaction transaction);
 
-        void Delete(BookTransaction transaction);
+        void Delete(Book book, LibraryMember libraryMember);
     }
 
 }

@@ -57,7 +57,8 @@ namespace LibrarySystem.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Copies = table.Column<int>(type: "int", nullable: false)
+                    Copies = table.Column<int>(type: "int", nullable: false),
+                    CopiesLeft = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

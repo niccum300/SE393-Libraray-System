@@ -13,5 +13,7 @@ namespace LibrarySystem.Services
         void Delete(Book book);
 
         Task<List<Book>> SearchTitle(string searchString);
+
+        Book FindByISBN(string ISBN);
     }
 }

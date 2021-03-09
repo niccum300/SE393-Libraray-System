@@ -27,7 +27,7 @@
                             <ValidationMessage For="@(() => newBook.Title)" />
                         </div>
                         <div class="form-group">
-                            <label for="Description" class="control-label">Title: </label>
+                            <label for="Description" class="control-label">Description: </label>
                             <InputTextArea id="description" @bind-Value="newBook.Description" class="form-control" />
                             <ValidationMessage For="@(() => newBook.Description)" />
                         </div>
@@ -45,16 +45,6 @@
                     </EditForm>
                 </div>
             </div>
-
-            @*<input class="btn btn-primary" type="submit" value="Test Transaction" @onclick="Test">
-            <input class="btn btn-primary" type="submit" value="test" @onclick="Test2">
-
-            @if (LibraryMember.LastName != null)
-            {
-                <h1>@LibraryMember.Transactions.Inl.FirstOrDefault()</h1>
-            }*@
-
-
 
         </div>
     </Authorized>
@@ -79,30 +69,11 @@
 
     private void HandleValidSubmit()
     {
+        newBook.CopiesLeft = newBook.Copies;
         _bookService.Create(newBook);
 
         NavigationManager.NavigateTo("/");
     }
-
-    //private void Test()
-    //{
-    //    BookTransaction transaction = new BookTransaction
-    //    {
-    //        BookId = 1,
-    //        LibraryMemberId = 1,
-    //        CheckoutDate = DateTime.Now
-    //    };
-
-    //    transactionService.Create(transaction);
-    //}
-
-    //private async void Test2()
-    //{
-    //    LibraryMember = await memberService.FindMember(1);
-
-    //    newBook = LibraryMember.Transactions.Select(s => s.Book).FirstOrDefault();
-
-    //    StateHasChanged();
 }
 
 

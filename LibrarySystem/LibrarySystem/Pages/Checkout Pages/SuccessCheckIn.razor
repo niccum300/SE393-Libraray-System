@@ -1,0 +1,50 @@
+﻿@using LibrarySystem.Services
+
+
+@if (ShowDialog)
+{
+    <div class="modal fade show d-block" id="exampleModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title" style="color:white" id="titleLabel">Find Member</h5>
+                </div>
+                <div class="modal-body">
+
+                    <h3>Check-In Successfull!</h3>
+                    <button type="submit" class="btn btn-primary" @onclick="@HandleValidSubmit">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+
+
+    public bool ShowDialog { get; set; }
+
+
+    [Parameter]
+    public EventCallback CloseEventCallback { get; set; }
+
+    public void Show()
+    {
+        ShowDialog = true;
+        StateHasChanged();
+    }
+    public void Close()
+    {
+        ShowDialog = false;
+        StateHasChanged();
+    }
+    protected async Task HandleValidSubmit()
+    {
+        ShowDialog = false;
+        await CloseEventCallback.InvokeAsync();
+
+
+        StateHasChanged();
+    }
+}
