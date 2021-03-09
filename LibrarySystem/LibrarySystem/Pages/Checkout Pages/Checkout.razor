@@ -124,6 +124,16 @@
 
         LibraryMemberSelected = true;
 
+        if (LibraryMember.MemberType == MemberType.LibraryMember)
+        {
+            BookCountLimit = 6;
+        }
+        else if (LibraryMember.MemberType == MemberType.Assistant || LibraryMember.MemberType == MemberType.Manager)
+        {
+            BookCountLimit = 12;
+        }
+
+
         StateHasChanged();
     }
 
@@ -180,4 +190,5 @@
 
         StateHasChanged();
     }
+
 }

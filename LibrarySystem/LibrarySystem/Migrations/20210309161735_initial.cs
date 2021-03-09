@@ -56,7 +56,7 @@ namespace LibrarySystem.Migrations
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ISBN = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ISBN = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     Copies = table.Column<int>(type: "int", nullable: false),
                     CopiesLeft = table.Column<int>(type: "int", nullable: false)
                 },
@@ -75,7 +75,8 @@ namespace LibrarySystem.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CardNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                    PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    MemberType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

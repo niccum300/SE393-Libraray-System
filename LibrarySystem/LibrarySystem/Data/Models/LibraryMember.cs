@@ -26,5 +26,7 @@ namespace LibrarySystem.Data.Models
         [Required]
         public string PhoneNumber { get; set; }
 
+        public MemberType MemberType { get; set; }
+
     }
 }

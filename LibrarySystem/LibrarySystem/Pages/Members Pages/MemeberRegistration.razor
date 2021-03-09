@@ -55,6 +55,8 @@
 
     private void HandleValidSubmit()
     {
+        newMember.MemberType = MemberType.LibraryMember;
+
         newMember.CardNumber = membersService.RandomString();
         membersService.Add(newMember);
 

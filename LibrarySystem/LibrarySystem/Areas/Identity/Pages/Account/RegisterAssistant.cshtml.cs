@@ -75,6 +75,7 @@ namespace LibrarySystem.Areas.Identity.Pages.Account
         public void CreateLibraryMember()
         {
             Input.LibraryMember.CardNumber = _membersService.RandomString();
+            Input.LibraryMember.MemberType = MemberType.Manager;
             _membersService.Add(Input.LibraryMember);
         }
 

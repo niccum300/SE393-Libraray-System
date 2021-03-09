@@ -27,19 +27,21 @@ namespace LibrarySystem.Areas.Identity.Pages.Account
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
+        private readonly IMembersService _membersService;
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IMembersService membersService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
+            _membersService = membersService;
         }
 
         [BindProperty]
@@ -66,6 +68,15 @@ namespace LibrarySystem.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public LibraryMember LibraryMember { get; set; }
+        }
+
+        public void AddMembership()
+        {
+            Input.LibraryMember.CardNumber = _membersService.RandomString();
+            Input.LibraryMember.MemberType = MemberType.Manager;
+            _membersService.Add(Input.LibraryMember);
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -110,6 +121,8 @@ namespace LibrarySystem.Areas.Identity.Pages.Account
                         pageHandler: null,
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
+
+                    AddMembership();
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
