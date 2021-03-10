@@ -1,5 +1,5 @@
 ﻿@using LibrarySystem.Services
-@inject IBooksService bookService
+@inject IMembersService membersService
 
 @if (ShowDialog)
 {
@@ -25,7 +25,7 @@
     public bool ShowDialog { get; set; }
 
     [Parameter]
-    public Book Book { get; set; }
+    public LibraryMember LibraryMember { get; set; }
 
     [Parameter]
     public EventCallback CloseEventCallback { get; set; }
@@ -44,7 +44,7 @@
     {
         ShowDialog = false;
 
-        bookService.Delete(Book);
+        membersService.Delete(LibraryMember);
 
         await CloseEventCallback.InvokeAsync();
 

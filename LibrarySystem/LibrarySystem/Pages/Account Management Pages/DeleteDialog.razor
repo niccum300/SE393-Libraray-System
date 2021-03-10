@@ -1,5 +1,7 @@
 ﻿@using LibrarySystem.Services
-@inject IBooksService bookService
+@using Microsoft.EntityFrameworkCore
+
+@inject IDbContextFactory<ApplicationDbContext> _db
 
 @if (ShowDialog)
 {
@@ -25,7 +27,7 @@
     public bool ShowDialog { get; set; }
 
     [Parameter]
-    public Book Book { get; set; }
+    public ApplicationUser User { get; set; }
 
     [Parameter]
     public EventCallback CloseEventCallback { get; set; }
@@ -44,7 +46,11 @@
     {
         ShowDialog = false;
 
-        bookService.Delete(Book);
+        using (var con = _db.CreateDbContext())
+        {
+            con.Users.Remove(User);
+            con.SaveChanges();
+        }
 
         await CloseEventCallback.InvokeAsync();
 

@@ -49,7 +49,7 @@
     {
         membersService.Delete(member);
 
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/members", forceLoad: true);
     }
 
     private void HandleCancelation()

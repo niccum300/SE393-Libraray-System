@@ -40,13 +40,17 @@
                             <td>@a.LibraryMember.FirstName</td>
                             <td>@a.LibraryMember.LastName</td>
                             <td>@a.LibraryMember.MemberType</td>
-                            <td><button type="submit" value="Delete" class="btn btn-danger">Delete</button></td>
+                            <td><button type="submit" value="Delete" class="btn btn-danger" @onclick="@(() => DeleteUser(a.User))">Delete</button></td>
 
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
+
+
+
+        <DeleteDialog @ref="DeleteDialog" User="@SelectedUser" CloseEventCallback="Refresh"></DeleteDialog>
     </Authorized>
     <NotAuthorized>
         <h2>You are not authorized to view this page!</h2>
@@ -62,11 +66,35 @@
         public LibraryMember LibraryMember { get; set; }
     }
 
+    public ApplicationUser SelectedUser = new ApplicationUser();
+
+    public DeleteDialog DeleteDialog = new DeleteDialog();
+
     public List<ApplicationUser> Users = new List<ApplicationUser>();
     public List<AccountInfo> AccountInfos = new List<AccountInfo>();
 
     protected override void OnInitialized()
     {
+        SearchUsers();
+    }
+
+    public void DeleteUser(ApplicationUser user)
+    {
+        SelectedUser = user;
+        DeleteDialog.Show();
+    }
+
+    void Refresh()
+    {
+        DeleteDialog.Close();
+        SearchUsers();
+        StateHasChanged();
+    }
+
+    void SearchUsers()
+    {
+        Users.Clear();
+        AccountInfos.Clear();
         using (var conn = _db.CreateDbContext())
         {
             Users = conn.Users.ToList();
