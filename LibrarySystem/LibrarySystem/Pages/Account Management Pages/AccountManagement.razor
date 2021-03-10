@@ -1,0 +1,85 @@
+﻿@page "/AccountManagement"
+@using LibrarySystem.Data
+@using LibrarySystem.Services
+@using Microsoft.EntityFrameworkCore
+
+@inject IDbContextFactory<ApplicationDbContext> _db
+@inject IMembersService _membersService
+@inject NavigationManager navManager
+
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <style>
+            a:active, a:link {
+                color: white;
+                text-decoration: none;
+            }
+        </style>
+        <div class="container text-center">
+            <h3>Manage User Logins</h3>
+            <br />
+
+            <a href="/Identity/Account/Register"><button type="submit" class="btn btn-primary">Add Manager</button></a>
+            <a href="/Identity/Account/RegisterAssistant "><button type="submit" class="btn btn-primary">Add Assistant</button></a>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Email</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Account Type</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (AccountInfo a in AccountInfos)
+                    {
+                        <tr>
+
+                            <td>@a.User.Email</td>
+                            <td>@a.LibraryMember.FirstName</td>
+                            <td>@a.LibraryMember.LastName</td>
+                            <td>@a.LibraryMember.MemberType</td>
+                            <td><button type="submit" value="Delete" class="btn btn-danger">Delete</button></td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h2>You are not authorized to view this page!</h2>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+
+    public class AccountInfo
+    {
+        public ApplicationUser User { get; set; }
+        public LibraryMember LibraryMember { get; set; }
+    }
+
+    public List<ApplicationUser> Users = new List<ApplicationUser>();
+    public List<AccountInfo> AccountInfos = new List<AccountInfo>();
+
+    protected override void OnInitialized()
+    {
+        using (var conn = _db.CreateDbContext())
+        {
+            Users = conn.Users.ToList();
+
+            foreach (ApplicationUser u in Users)
+            {
+                AccountInfo accountInfo = new AccountInfo();
+
+                accountInfo.User = u;
+                accountInfo.LibraryMember = _membersService.GetMember(u.LibraryMemberId);
+
+                AccountInfos.Add(accountInfo);
+            }
+        }
+    }
+}

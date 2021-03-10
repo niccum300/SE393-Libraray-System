@@ -88,7 +88,7 @@ namespace LibrarySystem.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/accountmanagement");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -107,7 +107,8 @@ namespace LibrarySystem.Areas.Identity.Pages.Account
                     await _roleManager.CreateAsync(new IdentityRole("LibraryMember"));
                 }
 
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, EmailConfirmed = true };
+                AddMembership();
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, EmailConfirmed = true, LibraryMemberId = _membersService.FindMember(Input.LibraryMember.CardNumber).Id };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -123,9 +124,7 @@ namespace LibrarySystem.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    AddMembership();
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

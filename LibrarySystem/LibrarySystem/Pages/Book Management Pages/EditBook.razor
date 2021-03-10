@@ -1,0 +1,90 @@
+﻿@page "/books/edit/{param}"
+@inject NavigationManager NavigationManager
+@using LibrarySystem.Services
+@inject IBooksService _bookService
+@inject ITransactionService transactionService
+@inject IMembersService memberService
+
+<AuthorizeView Context="EditBook" Roles="Admin">
+    <Authorized>
+        <div class="container">
+
+            <h3>Edit Books</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <EditForm Model="@book" OnValidSubmit="@HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-group">
+                            <label for="Author" class="control-label">Author: </label>
+                            <InputText id="author" @bind-Value="book.Author" class="form-control" />
+                            <ValidationMessage For="@(() => book.Author)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Title" class="control-label">Title: </label>
+                            <InputText id="title" @bind-Value="book.Title" class="form-control" />
+                            <ValidationMessage For="@(() => book.Title)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Description" class="control-label">Description: </label>
+                            <InputTextArea id="description" @bind-Value="book.Description" class="form-control" />
+                            <ValidationMessage For="@(() => book.Description)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ISBN" class="control-label">ISBN: </label>
+                            <InputText id="isbn" @bind-Value="book.ISBN" class="form-control" />
+                            <ValidationMessage For="@(() => book.ISBN)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Copies" class="control-label">Number of Copies: </label>
+                            <InputNumber id="copies" min="1" @bind-Value="book.Copies" class="form-control" />
+                            <ValidationMessage For="@(() => book.Copies)" />
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Submit">
+                        <input class="btn btn-danger" type="submit" value="Delete Book" @onclick="@(() => DeleteBook())">
+                    </EditForm>
+                </div>
+            </div>
+
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h2>You are not authorized to view this page!</h2>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+
+@code {
+
+    [Parameter]
+    public string param { get; set; }
+
+    private Book book = new Book();
+
+    private LibraryMember LibraryMember = new LibraryMember();
+
+    protected override void OnInitialized()
+    {
+        book =  _bookService.FindByISBN(param);
+    }
+
+
+    private void HandleValidSubmit()
+    {
+        book.CopiesLeft = book.Copies;
+        _bookService.Update(book);
+
+        NavigationManager.NavigateTo("/");
+    }
+
+    protected void DeleteBook()
+    {
+        _bookService.Delete(book);
+    }
+}
+
+
+

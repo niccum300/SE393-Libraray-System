@@ -98,7 +98,7 @@ namespace LibrarySystem.Areas.Identity.Pages.Account
                     await _roleManager.CreateAsync(new IdentityRole("Assistant"));
                 }
 
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, EmailConfirmed = true };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, EmailConfirmed = true, LibraryMemberId = _membersService.FindMember(Input.LibraryMember.CardNumber).Id };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

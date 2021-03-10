@@ -16,6 +16,8 @@ namespace LibrarySystem.Services
 
         LibraryMember FindMember(string cardNumber);
 
+        LibraryMember GetMember(int id);
+
         Task<List<LibraryMember>> SearchMembers(string searchString);
 
         string RandomString();

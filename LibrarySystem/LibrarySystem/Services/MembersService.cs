@@ -56,6 +56,18 @@ namespace LibrarySystem.Services
             return member;
         }
 
+        public LibraryMember GetMember(int id)
+        {
+            LibraryMember member = new LibraryMember();
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                member = dbContext.LibraryMembers.Where(member => member.Id == id).FirstOrDefault();
+                dbContext.SaveChanges();
+            }
+
+            return member;
+        }
+
         public LibraryMember FindMember(string cardNumber)
         {
             LibraryMember libraryMember;
