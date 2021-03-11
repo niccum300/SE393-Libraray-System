@@ -14,6 +14,8 @@ namespace LibrarySystem.Services
 
         Task<List<Book>> SearchTitle(string searchString);
 
+        List<Book> GetMembersBooks(LibraryMember libraryMember);
+
         Book FindByISBN(string ISBN);
     }
 }

@@ -79,7 +79,7 @@
         book.CopiesLeft = book.Copies;
         _bookService.Update(book);
 
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/books");
     }
 
     protected void DeleteBook()
@@ -91,6 +91,7 @@
     {
         DeleteDialog.Close();
         StateHasChanged();
+        NavigationManager.NavigateTo("/books");
     }
 }
 

@@ -98,5 +98,25 @@ namespace LibrarySystem.Services
 
             return count;
         }
+
+        public List<BookTransaction> Transactions(LibraryMember libraryMember)
+        {
+            using (var conn = _db.CreateDbContext())
+            {
+
+                return conn.Transactions.Where(t => t.LibraryMemberId == libraryMember.Id).ToList();
+            }
+        }
+
+        public void CheckInBook(Book book, LibraryMember libraryMember)
+        {
+            _transactionService.Delete(book, libraryMember);
+
+            book.CopiesLeft += 1;
+            if (book.CopiesLeft <= book.Copies)
+            {
+                _booksService.Update(book);
+            }
+        }
     }
 }

@@ -53,6 +53,25 @@ namespace LibrarySystem.Services
             }
         }
 
+        public List<Book> GetMembersBooks(LibraryMember libraryMember)
+        {
+            List<BookTransaction> transactions = new List<BookTransaction>();
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+               transactions = dbContext.Transactions.Where(b => b.LibraryMemberId == libraryMember.Id).ToList();
+            }
+
+            List<Book> books = new List<Book>();
+            using (ApplicationDbContext dbContext = _db.CreateDbContext())
+            {
+                foreach (var T in transactions)
+                {
+                    books.Add(dbContext.Books.Where(b => b.Id == T.BookId).FirstOrDefault());
+                }
+            }
+            return books;
+        }
+
         public Book FindByISBN(string ISBN)
         {
             using (ApplicationDbContext dbContext = _db.CreateDbContext())

@@ -1,0 +1,128 @@
+﻿@page "/UserBooks"
+@using LibrarySystem.Services
+@using LibrarySystem.Pages.Members_Pages
+@inject IBooksService _booksService
+@inject IMembersService _membersService
+@inject ICheckoutService _checkoutService
+
+
+<div class="container text-center">
+    <h3>See Your Books</h3>
+
+    <div class="card">
+
+        <div class="card-header bg-primary">
+            <div class="container text-white text-center">
+                @if (LibraryMemberSelected)
+                {
+                    <h3>Member: @libraryMember.FirstName @libraryMember.LastName</h3>
+                }
+                else
+                {
+                    <h3>Click to find your books.</h3>
+                }
+
+            </div>
+        </div>
+        <div class="card-body">
+            @if (!LibraryMemberSelected)
+            {
+                <input class="btn btn-primary" type="submit" value="Add Member" @onclick="@AddMember">
+
+            }
+
+        </div>
+    </div>
+
+
+    @if (errorFlag == 1)
+    {
+        <h1 style="color:red">@errorMsg</h1>
+    }
+
+    @if (books.Count > 0)
+    {
+
+        <br />
+        <h3>Current Books Checked Out</h3>
+        <br />
+        <div class="container">
+            @for (int i = 0; i < books.Count; i += 3)
+            {
+                <div class="row">
+                    @for (int j = i; (j < i + 3) && (j < books.Count); j++)
+                    {
+                        <div class="col-md-4 col-md-2">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3><bold>@books[j].Title</bold></h3>
+                                    <h3><bold>Due: @transactions[j].DueDate</bold></h3>
+                                </div>
+                                <div class="card-body text-center book-color_2">
+                                    <h5>@books[j].Author</h5>
+                                    <br />
+                                    <h5><bold>Copies Left: </bold>@books[j].CopiesLeft</h5>
+                                    <br />
+                                    <hh6><bold>ISBN: </bold>@books[j].ISBN</hh6>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    }
+
+                    <div class="col-sm-12 shelf hidden-md hidden-lg"></div>
+                </div>
+                <br />
+                <br />
+            }
+        </div>
+        <br />
+        <br />
+    }
+
+</div>
+
+<MemberSearchModal @ref="MemberSearchModal" LibraryMember="@libraryMember" CloseEventCallback="@SetMember"></MemberSearchModal>
+
+@code {
+
+    public MemberSearchModal MemberSearchModal = new MemberSearchModal();
+    public SuccessCheckIn SuccessCheckIn = new SuccessCheckIn();
+
+    private List<Book> books = new List<Book>();
+    private List<BookTransaction> transactions = new List<BookTransaction>();
+    private LibraryMember libraryMember = new LibraryMember();
+
+    public bool LibraryMemberSelected = false;
+
+    string errorMsg = "";
+    int errorFlag = 0;
+
+    void AddMember()
+    {
+        MemberSearchModal.Show();
+    }
+
+    void SetMember(LibraryMember LibraryMember)
+    {
+        libraryMember = LibraryMember;
+
+        LibraryMemberSelected = true;
+
+        books = _booksService.GetMembersBooks(LibraryMember);
+
+        transactions = _checkoutService.Transactions(LibraryMember);
+
+        StateHasChanged();
+    }
+
+    void Reset()
+    {
+        books.Clear();
+
+        errorFlag = 0;
+        LibraryMemberSelected = false;
+        libraryMember = new LibraryMember();
+    }
+}
+

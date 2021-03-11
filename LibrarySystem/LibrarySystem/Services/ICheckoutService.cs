@@ -9,7 +9,11 @@ namespace LibrarySystem.Services
 
         void CheckInBooks(List<Book> books, LibraryMember libraryMember);
 
+        void CheckInBook(Book book, LibraryMember libraryMember);
+
         int CopiesCheckedOut(LibraryMember libraryMember);
+
+        public List<BookTransaction> Transactions(LibraryMember libraryMember);
 
         void Add(BookTransaction transaction);
 

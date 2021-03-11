@@ -1,11 +1,11 @@
-﻿@page "/kiosk"
+﻿@page "/"
 @using LibrarySystem.Services;
 @inject IBooksService booksService
 @inject NavigationManager navigationManger
 
 
 <div class="container text-center">
-    <h2>Book Management</h2>
+    <h2>Book Catalog</h2>
 </div>
 <br />
 <div class="container text-center">
@@ -29,7 +29,6 @@
     <br />
     <p><em>@books.Count Results Found</em></p>
 
-    <h5>Book Shelf</h5>
     @if (books.Count > 0)
     {
         <br />

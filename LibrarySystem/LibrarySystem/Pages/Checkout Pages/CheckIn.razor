@@ -20,31 +20,20 @@
                         }
                         else
                         {
-                            <h3>Add a Library Member to start check-in process.</h3>
+                            <h3>Add a Library Member to start check-in process.</h3> 
                         }
 
                     </div>
                 </div>
                 <div class="card-body">
-                    @if (LibraryMemberSelected)
+                    @if (!LibraryMemberSelected)
                     {
-                        <EditForm Model="@BookToReturn" OnValidSubmit="@AddBook">
-                            <DataAnnotationsValidator />
+                        <input class="btn btn-primary" type="submit" value="Add Member" @onclick="@AddMember">
 
-                            <div class="form-group">
-                                <label for="Author" class="control-label">ISBN: </label>
-                                <InputText id="author" @bind-Value="BookToReturn.ISBN" class="form-control" />
-                                <ValidationMessage For="@(() => BookToReturn.ISBN)" />
-                            </div>
-
-                            <input class="btn btn-primary" type="submit" value="Add" @onclick="@AddBook">
-                            <input class="btn btn-primary" type="submit" value="Check-In Books" @onclick="@CheckInBooks">
-
-                        </EditForm>
                     }
                     else
                     {
-                        <input class="btn btn-primary" type="submit" value="Add Member" @onclick="@AddMember">
+                        <input class="btn btn-primary" type="submit" value="Check In All Books" @onclick="@CheckInBooks">
                     }
 
                 </div>
@@ -59,8 +48,8 @@
             @if (books.Count > 0)
             {
 
-                <h3>Scanned Added to Checkout</h3>
                 <br />
+                <h3>Current Books Checked Out</h3>
                 <br />
                 <div class="container">
                     @for (int i = 0; i < books.Count; i += 3)
@@ -69,7 +58,24 @@
                             @for (int j = i; (j < i + 3) && (j < books.Count); j++)
                             {
                                 <div class="col-md-4 col-md-2">
-                                    <BookCard Book="books[j]"></BookCard>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3><bold>@books[j].Title</bold></h3>
+                                        </div>
+                                        <div class="card-body text-center book-color_2">
+                                            <h5>@books[j].Author</h5>
+                                            <br />
+                                            <h5><bold>Copies Left: </bold>@books[j].CopiesLeft</h5>
+                                            <br />
+                                            <hh6><bold>ISBN: </bold>@books[j].ISBN</hh6>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-light btn-md float-right" @onclick="@(() => CheckInBook(books[j-1]))"
+                                                    id="right" style="color:black">
+                                                Check In Book
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <br />
                             }
@@ -99,8 +105,6 @@
     public MemberSearchModal MemberSearchModal = new MemberSearchModal();
     public SuccessCheckIn SuccessCheckIn = new SuccessCheckIn();
 
-    private Book BookToReturn = new Book();
-
     private List<Book> books = new List<Book>();
     private LibraryMember libraryMember = new LibraryMember();
 
@@ -120,30 +124,16 @@
 
         LibraryMemberSelected = true;
 
+        books = _booksService.GetMembersBooks(LibraryMember);
+
         StateHasChanged();
     }
 
-    void AddBook()
+    private void CheckInBook(Book book)
     {
-        int result = _checkoutService.CopiesLeft(BookToReturn);
-
-        if (result < 0)
-        {
-            errorFlag = 1;
-            errorMsg = "You have entered an invalid ISBN value. Please Try Again.";
-        }
-        else
-        {
-            errorFlag = 0;
-            books.Add(_booksService.FindByISBN(BookToReturn.ISBN));
-        }
-
-        BookToReturn = new Book();
-
-
-        StateHasChanged();
+        books.Remove(book);
+        _checkoutService.CheckInBook(book, libraryMember);
     }
-
 
     private void CheckInBooks()
     {
@@ -156,7 +146,6 @@
     void Reset()
     {
         books.Clear();
-        BookToReturn = new Book();
 
         errorFlag = 0;
         LibraryMemberSelected = false;
